@@ -167,3 +167,90 @@ Example:
   "error": "Error logging in user: error_message_here"
 }
 ```
+
+# User Profile Endpoint
+
+## Endpoint
+`GET /users/profile`
+
+## Description
+This endpoint is used to retrieve the profile data of the authenticated user. It requires a valid authentication token.
+
+## Request Headers
+- `Authorization` (string, required): The user's JWT token in the format `Bearer token`.
+
+## Responses
+
+### Success
+- **Status Code**: `200 OK`
+- **Body**: A JSON object containing the user details.
+```json
+{
+  "user": {
+    "_id": "user_id_here",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
+  }
+}
+```
+
+### Authentication Error
+- **Status Code**: `401 Unauthorized`
+- **Body**: A JSON object indicating invalid or missing token.
+```json
+{
+  "error": "Unauthorized access. Token is missing or invalid."
+}
+```
+
+### Server Error
+- **Status Code**: `500 Internal Server Error`
+- **Body**: A JSON object indicating an error occurred on the server.
+```json
+{
+  "error": "Error retrieving user profile: error_message_here"
+}
+```
+
+# User Logout Endpoint
+
+## Endpoint
+`GET /users/logout`
+
+## Description
+This endpoint is used to log out the authenticated user. It requires a valid authentication token.
+
+## Request Headers
+- `Authorization` (string, required): The user's JWT token in the format `Bearer token`.
+
+## Responses
+
+### Success
+- **Status Code**: `200 OK`
+- **Body**: A JSON object indicating successful logout.
+```json
+{
+  "message": "User logged out successfully."
+}
+```
+
+### Authentication Error
+- **Status Code**: `401 Unauthorized`
+- **Body**: A JSON object indicating invalid or missing token.
+```json
+{
+  "error": "Unauthorized access. Token is missing or invalid."
+}
+```
+
+### Server Error
+- **Status Code**: `500 Internal Server Error`
+- **Body**: A JSON object indicating an error occurred on the server.
+```json
+{
+  "error": "Error logging out user: error_message_here"
+}
+```
