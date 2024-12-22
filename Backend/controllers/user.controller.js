@@ -5,7 +5,6 @@ const blacklistTokenModel=require('../models/blacklistToken.model')
 
 module.exports.registerUser = async (req, res, next) => {
 
-    // Validate request body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -13,9 +12,20 @@ module.exports.registerUser = async (req, res, next) => {
 
     const { fullname, email, password } = req.body;
 
+   
+
   
     if (!fullname || typeof fullname !== 'object' || !fullname.firstname ) {
       return res.status(400).json({ error: "Fullname with firstname is required." });
+    }
+    const isUserAlreadyExists=await userModel.findOne({email});
+    
+
+    if(isUserAlreadyExists)
+    {
+      return res.status(400).json({
+        message:"User already exists with this email !!"
+      });
     }
 
     // Hash the password
