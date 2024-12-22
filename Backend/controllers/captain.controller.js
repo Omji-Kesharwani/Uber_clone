@@ -1,7 +1,7 @@
+const blacklistTokenModel = require('../models/blacklistToken.model');
 const captainModel = require('../models/captain.model');
 const captainService = require('../services/captain.service');
-const { validationResult } = require('express-validator'); // Fixed typo: validateResult -> validationResult
-
+const { validationResult } = require('express-validator');
 module.exports.registerCaptain = async (req, res, next) => {
   try {
     // Validate the request
@@ -51,3 +51,49 @@ module.exports.registerCaptain = async (req, res, next) => {
     next(error); // Pass the error to the error-handling middleware
   }
 };
+module.exports.loginCaptain = async (req, res, next) => {
+  // Validate request body
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { email, password } = req.body;
+
+  try {
+    const captain = await captainModel.findOne({ email }).select('+password');
+    if (!captain) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+   
+    const isMatch = await captain.comparePasswords(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+   
+    const token = captain.generateAuthToken();
+
+    res
+      .cookie('token', token)
+      .status(200)
+      .json({ message: 'Login successful', token });
+  } catch (error) {
+   
+    console.error('Error during login:', error.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+module.exports.getCaptainProfile=async(req,res,next)=>{
+  res.status(200).json({captain:req.captain})
+}
+
+module.exports.logoutCaptain=async(req,res,next)=>{
+  const token=req.cookies.token || req.headers.authorizaton?.split(' ')[1];
+  await blacklistTokenModel.create({token});
+  res.clearCookie('token');
+  res.status(200).json({message:'Logout successfully'})
+}

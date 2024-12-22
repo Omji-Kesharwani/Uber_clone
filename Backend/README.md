@@ -382,3 +382,115 @@ Example:
   "error": "Error creating captain: error_message_here"
 }
 ```
+
+# API Documentation
+
+## /captains
+
+### POST /captains/register
+
+Register a new captain.
+
+#### Request Body
+```json
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC1234",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+#### Response
+```json
+{
+  "token": "jwt_token_here",
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive",
+    "location": {
+      "latitude": null,
+      "longitude": null
+    }
+  }
+}
+```
+
+### POST /captains/login
+
+Login a captain.
+
+#### Request Body
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+```
+
+#### Response
+```json
+{
+  "message": "Login successful",
+  "token": "jwt_token_here"
+}
+```
+
+### GET /captains/profile
+
+Get the profile of the logged-in captain.
+
+#### Response
+```json
+{
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive",
+    "location": {
+      "latitude": null,
+      "longitude": null
+    }
+  }
+}
+```
+
+### GET /captains/logout
+
+Logout the captain.
+
+#### Response
+```json
+{
+  "message": "Logout successfully"
+}
+```

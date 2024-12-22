@@ -18,7 +18,7 @@ module.exports.createCaptain = async ({
     const captain = await captainModel.create({
       fullname: {
         firstname,
-        lastname: lastname || null, // Include `lastname` only if provided
+        lastname: lastname || null, 
       },
       email,
       password,
