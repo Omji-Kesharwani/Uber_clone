@@ -1,41 +1,39 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
-
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { CaptainDataContext } from '../context/CaptainContext';
 const CaptainLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [captainData, setCaptainData] = useState([]);
+  const navigate=useNavigate();
+  const {captain,setCaptain}=useContext(CaptainDataContext)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    setIsLoading(true);
+    const CaptainData={
+      email:email,
+      password:password
+    }
+ 
+    const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`,CaptainData)
 
-    if (!firstName || !lastName || !email || !password) {
-      alert('Please fill out all fields');
-      return;
+    if(response.status==200)
+    {
+      const data=response.data
+      setCaptain(data.captain)
+      localStorage.setItem('token',data.token)
+      setIsLoading(false);
+      navigate('/captain-home')
+
     }
 
-    setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-
-      setUserData({
-        fullName:{
-          firstName:firstName,
-          lastName:lastName
-        },
-        email,
-        password
-      });
-
-      // Clear form fields
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setPassword('');
-    }, 1000);
+     setEmail('');
+     setPassword('');
   };
 
 

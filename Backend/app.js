@@ -5,7 +5,9 @@ const cors = require('cors');
 const app = express();
 const connect = require('./db/db');
 const cookieParser = require('cookie-parser')
-app.use(cors());
+app.use(cors({
+  origin:"http://localhost:5173"
+}));
 const userRoutes = require('./routes/user.routes');
 const captainRoutes=require('./routes/captain.routes')
 connect();

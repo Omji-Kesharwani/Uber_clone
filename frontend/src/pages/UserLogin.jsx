@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '../components/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserDataContext } from '../context/UserContext';
+import axios from 'axios';
+
 
 const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -9,35 +12,26 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userData, setUserData] = useState({});
+  const {user,setUser}=useContext(UserDataContext)
+  const navigate=useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-
-    if (!firstName || !lastName || !email || !password) {
-      alert('Please fill out all fields');
-      return;
-    }
-
     setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-
-      setUserData({
-        fullName:{
-          firstName:firstName,
-          lastName:lastName
-        },
-        email,
-        password
-      });
-
-      // Clear form fields
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setPassword('');
-    }, 1000);
+   
+    const userData={
+      email:email,
+      password:password
+    }
+    const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`,userData)
+    if(response.status===200)
+    {
+      const data=response.data
+      setIsLoading(false)
+      setUser(data.user)
+      localStorage.setItem('token',data.token)
+      navigate('/home')
+    }
   };
 
   return (
@@ -51,34 +45,7 @@ const LoginPage = () => {
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
         <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
         <form onSubmit={handleSubmit}>
-          <div className="flex gap-4 mb-4">
-            <div className="w-1/2">
-              <label htmlFor="firstName" className="block text-gray-700 font-medium mb-2">
-                First Name
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                placeholder="First name"
-                className="w-full px-4 py-2 border bg-[#eeeeee] border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-black"
-              />
-            </div>
-            <div className="w-1/2">
-              <label htmlFor="lastName" className="block text-gray-700 font-medium mb-2">
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                placeholder="Last name"
-                className="w-full px-4 py-2 border bg-[#eeeeee] border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-black"
-              />
-            </div>
-          </div>
+          
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
               What's your Email

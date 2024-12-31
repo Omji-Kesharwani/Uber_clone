@@ -91,9 +91,10 @@ module.exports.getCaptainProfile=async(req,res,next)=>{
   res.status(200).json({captain:req.captain})
 }
 
-module.exports.logoutCaptain=async(req,res,next)=>{
-  const token=req.cookies.token || req.headers.authorizaton?.split(' ')[1];
-  await blacklistTokenModel.create({token});
+module.exports.logoutCaptain = async (req, res, next) => {
+  const token = req.cookies.token || req.headers.authorization?.split(' ')[1]; // Fixed the typo here
+  await blacklistTokenModel.create({ token });
   res.clearCookie('token');
-  res.status(200).json({message:'Logout successfully'})
-}
+  res.status(200).json({ message: 'Logout successfully' });
+};
+

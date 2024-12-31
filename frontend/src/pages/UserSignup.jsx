@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
+import axios from 'axios'
+import { UserDataContext } from '../context/UserContext';
 
 const UserSignup = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -8,28 +10,35 @@ const UserSignup = () => {
   const [lastName,setLastName]=useState('');
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
-  const [userData,setUserData]=useState({})
 
-  const handleSubmit = (e) => {
+  const navigate=useNavigate();
+  const {user,setUser}=useContext(UserDataContext)
+ console.log(user)
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    
+    setIsLoading(true);
     const newUserData = {
-      fullName: {
-        firstName: firstName,
-        lastName: lastName,
+      fullname: {
+        firstname: firstName,
+        lastname: lastName,
       },
       email: email,
       password: password,
     };
-  
-    console.log(newUserData); // Logs the updated data
-  
-    setUserData(newUserData); // Updates the state
-  
-    setIsLoading(true);
-    setTimeout(() => {
+   console.log(newUserData)
+    const response= await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,newUserData)
+    
+    if(response.status===201)
+    {
+      const data=response.data;
       setIsLoading(false);
-    }, 1000);
+      setUser(data.user)
+      localStorage.setItem('token',data.token)
+      navigate('/home')
+    }
+  
+    
+   
   
     setFirstName('');
     setLastName('');
@@ -120,7 +129,7 @@ const UserSignup = () => {
             type="button"
             className="bg-[#10b461] text-fff font-semibold items-center justify-center p-3 w-full rounded-lg text-white mt-8"
           >
-            <Link to={"/captain-login"}>Signup as Captain</Link>
+            <Link to={"/captain-signup"}>Signup as Captain</Link>
           </Button>
         </div>
       </div>
