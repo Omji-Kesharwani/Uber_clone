@@ -144,7 +144,7 @@ const Home = () => {
 
       <div
         ref={vehiclePanelRef}
-        className="fixed z-10 bottom-0 px-3 py-8 bg-white w-screen flex flex-col pt-12"
+        className="fixed z-10 bottom-0 px-3 py-8 bg-white w-screen flex flex-col pt-12 translate-y-full"
       >
         <VehiclePanel setVehiclePanelOpen={setVehiclePanelOpen} 
         setConfirmRidePanel={setConfirmRidePanel}
@@ -153,7 +153,7 @@ const Home = () => {
       </div>
       <div
         ref={confirmridePanelRef}
-        className="fixed z-10 bottom-0 px-3 py-6 bg-white w-screen flex flex-col pt-12"
+        className="fixed z-10 bottom-0 px-3 py-6 bg-white w-screen flex flex-col pt-12 translate-y-full"
       >
         <Confirmedride setConfirmRidePanel={setConfirmRidePanel}
         setvehicleFound={setvehicleFound}
@@ -162,14 +162,14 @@ const Home = () => {
       </div>
       <div
        ref={vehicleFoundRef}
-        className="fixed z-10 bottom-0 px-3 py-6 bg-white w-screen flex flex-col pt-12"
+        className="fixed z-10 bottom-0 px-3 py-6 bg-white w-screen flex flex-col pt-12 translate-y-full"
       >
         <LookingForDriver setvehicleFound={setvehicleFound}/>
        
       </div>
       <div
         ref={waitingForDriverRef}
-        className="fixed z-10 bottom-0 px-3 py-6 bg-white w-screen flex flex-col pt-12"
+        className="fixed z-10 bottom-0 px-3 py-6 bg-white w-screen flex flex-col pt-12 translate-y-full"
       >
         <WaitForDriver setWaitforDriver={setWaitforDriver}/>
        
