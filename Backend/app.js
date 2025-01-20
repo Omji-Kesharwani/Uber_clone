@@ -5,6 +5,8 @@ const cors = require('cors');
 const app = express();
 const connect = require('./db/db');
 const cookieParser = require('cookie-parser')
+
+const mapsRoutes=require('./routes/maps.routes');
 app.use(cors({
   origin:"http://localhost:5173"
 }));
@@ -15,11 +17,10 @@ connect();
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.get('/', (req, res) => {
-  res.send('Hello World');
-})
+
 app.use('/users', userRoutes);
-app.use('/captains',captainRoutes)
+app.use('/captains',captainRoutes);
+app.use('/maps',mapsRoutes)
 
 
 module.exports = app;
